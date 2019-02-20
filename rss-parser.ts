@@ -19,14 +19,9 @@ import values from 'lodash/values';
 import get from 'lodash/get';
 
 
-
-
-
-
-
 // flattens an object (recursively!), similarly to Array#flatten
 // e.g. flatten({ a: { b: { c: "hello!" } } }); // => "hello!"
-function flatten(object) {
+function flatten(object: any) {
     const check = isPlainObject(object) && size(object) === 1;
     return check ? flatten(values(object)[0]) : object;
 }
@@ -103,7 +98,13 @@ export function parse(xml: any) {
     // simplify to reduce number of final leaf nodes and return
     return flatten(data);
 }
-
+/**
+ * http.get('https://www.philgo.com/?api=rss&post_id=freetalk', { responseType: 'text' })
+      .pipe(
+        map(xmlText => {
+          return parseRss(xmlText);
+        })
+ */
 export function parseRss(xmlText: string) {
     const XML = new DOMParser().parseFromString(xmlText, 'text/xml');
     const obj = parse(XML);
